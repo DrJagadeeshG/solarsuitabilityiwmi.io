@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Suitability Dashboard - Documentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <style>
+        :root {
+            --solar-gold: #FFD700;
+            --solar-orange: #FF8C00;
+            --solar-yellow: #FFA500;
+            --solar-blue: #1E88E5;
+            --solar-gradient: linear-gradient(135deg, #FFD700 0%, #FF8C00 50%, #FF6B35 100%);
+            --water-blue: #2196F3;
+        }
+        
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .doc-sidebar {
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .doc-content {
+            padding: 25px;
+        }
+        
+        .feature-card {
+            border: none;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(255, 140, 0, 0.2);
+        }
+        
+        .code-block {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid var(--solar-gold);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .metric-example {
+            background: var(--solar-gradient);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .section-title {
+            background: var(--solar-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+        
+        .badge {
+            border-radius: 25px;
+            padding: 8px 16px;
+            font-weight: 600;
+        }
+        
+        .bg-success {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%) !important;
+        }
+        
+        .bg-info {
+            background: var(--solar-gradient) !important;
+        }
+        
+        .navbar-dark .navbar-brand {
+            color: white !important;
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+        
+        .hero-header {
+            background: var(--solar-gradient);
+            color: white;
+            padding: 30px 0;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 140, 0, 0.3);
+        }
+        
+        .solar-icon {
+            color: var(--solar-gold);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <img src="IWMI_logo.png" alt="IWMI Logo" style="height: 40px; margin-right: 12px;">
+                <span>Solar Suitability Map</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">🏠 Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="documentation.html">📚 Documentation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="feedback-embedded.html">💬 Feedback</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-5 pt-4">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3">
+                <div class="doc-sidebar">
+                    <h5 class="text-primary mb-3">📚 Documentation</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#overview" class="text-decoration-none">🌟 Overview</a></li>
+                        <li><a href="#features" class="text-decoration-none">⚡ Key Features</a></li>
+                        <li><a href="#getting-started" class="text-decoration-none">🚀 Getting Started</a></li>
+                        <li><a href="#dashboard-guide" class="text-decoration-none">📊 Dashboard Guide</a></li>
+                        <li><a href="#categories" class="text-decoration-none">🎯 Categories</a></li>
+                        <li><a href="#parameters" class="text-decoration-none">📋 Parameters</a></li>
+                        <li><a href="#technical" class="text-decoration-none">⚙️ Technical Details</a></li>
+                        <li><a href="#troubleshooting" class="text-decoration-none">🔧 Troubleshooting</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <div class="doc-content">
+                    <!-- Header -->
+                    <div class="hero-header">
+                        <div class="text-center mb-3">
+                            <h1 class="display-4 mb-0" style="color: white;">☀️ Solar Suitability Dashboard</h1>
+                        </div>
+                        <p class="lead mb-3">Comprehensive Documentation & User Guide</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <div class="badge bg-success fs-6">Version 8.0</div>
+                            <div class="badge bg-light text-dark fs-6">Last Updated: May 2025</div>
+                        </div>
+                    </div>
+
+                    <!-- Overview Section -->
+                    <section id="overview" class="mb-5">
+                        <h2 class="section-title mb-4">🌟 Overview</h2>
+                        <div class="card feature-card mb-4">
+                            <div class="card-body">
+                                <p class="lead">The Solar Suitability Dashboard is an advanced geospatial analytics platform designed to assess solar energy potential and suitability across Indian districts and states.</p>
+                                
+                                <h5 class="mt-4">🎯 Purpose</h5>
+                                <p>This dashboard helps policymakers, researchers, and stakeholders make informed decisions about solar energy deployment by providing comprehensive analysis across three key objectives:</p>
+                                
+                                <div class="row mt-3">
+                                    <div class="col-md-4">
+                                        <div class="metric-example text-center">
+                                            <h6><i class="fas fa-shield-alt solar-icon"></i> Adaptation</h6>
+                                            <p class="mb-0">Climate resilience strategies</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="metric-example text-center">
+                                            <h6><i class="fas fa-leaf solar-icon"></i> Mitigation</h6>
+                                            <p class="mb-0">Carbon reduction potential</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="metric-example text-center">
+                                            <h6><i class="fas fa-tint solar-icon"></i> GW Sustainability</h6>
+                                            <p class="mb-0">Groundwater conservation</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Features Section -->
+                    <section id="features" class="mb-5">
+                        <h2 class="text-primary mb-4">⚡ Key Features</h2>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="card feature-card h-100">
+                                    <div class="card-body">
+                                        <h5><i class="fas fa-map text-primary"></i> Interactive Maps</h5>
+                                        <p>Dynamic choropleth maps with state boundary overlays and zoom capabilities</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="card feature-card h-100">
+                                    <div class="card-body">
+                                        <h5><i class="fas fa-filter text-primary"></i> Multi-level Filtering</h5>
+                                        <p>Filter by state, district, and objective categories for targeted analysis</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="card feature-card h-100">
+                                    <div class="card-body">
+                                        <h5><i class="fas fa-chart-pie text-primary"></i> Statistical Analysis</h5>
+                                        <p>Real-time statistics with pie charts and percentage distributions</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="card feature-card h-100">
+                                    <div class="card-body">
+                                        <h5><i class="fas fa-tachometer-alt text-primary"></i> Performance Optimized</h5>
+                                        <p>Aggressive caching and optimized rendering for fast load times</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Getting Started Section -->
+                    <section id="getting-started" class="mb-5">
+                        <h2 class="text-primary mb-4">🚀 Getting Started</h2>
+                        <div class="card feature-card">
+                            <div class="card-body">
+                                <h5>Quick Start Guide</h5>
+                                <ol>
+                                    <li><strong>Access the Dashboard:</strong> Visit <a href="https://solarsustainabilitymap5.streamlit.app/" target="_blank">solarsustainabilitymap5.streamlit.app</a></li>
+                                    <li><strong>Select Filters:</strong> Choose your desired State, District, and Objective</li>
+                                    <li><strong>Explore Data:</strong> View maps, statistics, and detailed parameters</li>
+                                    <li><strong>Analyze Results:</strong> Use the legend and metrics for insights</li>
+                                </ol>
+                                
+                                <div class="code-block mt-3">
+                                    <strong>Direct Dashboard URL:</strong><br>
+                                    https://solarsustainabilitymap5.streamlit.app/
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Dashboard Guide Section -->
+                    <section id="dashboard-guide" class="mb-5">
+                        <h2 class="text-primary mb-4">📊 Dashboard Guide</h2>
+                        
+                        <h4>🎛️ Control Panel</h4>
+                        <div class="card feature-card mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h6>🌍 State Filter</h6>
+                                        <p>Select "All States" for national view or specific state for regional analysis</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6>🏘️ District Filter</h6>
+                                        <p>Choose "All Districts" for state-level view or specific district for detailed analysis</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6>🎯 Objective Filter</h6>
+                                        <p>Switch between Adaptation, Mitigation, GW Sustainability, or Combined analysis</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>📈 Dashboard Views</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="card feature-card h-100">
+                                    <div class="card-body">
+                                        <h6>🗺️ National/State View</h6>
+                                        <ul>
+                                            <li>Interactive choropleth map</li>
+                                            <li>Statistical distribution legend</li>
+                                            <li>Key parameter averages</li>
+                                            <li>Pie chart visualization</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="card feature-card h-100">
+                                    <div class="card-body">
+                                        <h6>🏘️ District View</h6>
+                                        <ul>
+                                            <li>Detailed district map</li>
+                                            <li>6-column parameter layout</li>
+                                            <li>Contextual text insights</li>
+                                            <li>Recommended model suggestions</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Categories Section -->
+                    <section id="categories" class="mb-5">
+                        <h2 class="text-primary mb-4">🎯 Analysis Categories</h2>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <div class="card feature-card h-100">
+                                    <div class="card-body text-center">
+                                        <h5 style="color: #1E88E5;">🔄 Adaptation</h5>
+                                        <p>Climate resilience and adaptive capacity assessment</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card feature-card h-100">
+                                    <div class="card-body text-center">
+                                        <h5 style="color: #8E24AA;">🌱 Mitigation</h5>
+                                        <p>Carbon emission reduction potential analysis</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card feature-card h-100">
+                                    <div class="card-body text-center">
+                                        <h5 style="color: #43A047;">💧 GW Sustainability</h5>
+                                        <p>Groundwater conservation and management</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card feature-card h-100">
+                                    <div class="card-body text-center">
+                                        <h5 style="color: #6A1B9A;">🎯 Combined</h5>
+                                        <p>Integrated multi-objective analysis</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Parameters Section -->
+                    <section id="parameters" class="mb-5">
+                        <h2 class="text-primary mb-4">📋 Key Parameters</h2>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card feature-card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">🌾 Agricultural Parameters</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul>
+                                            <li><strong>Cropping Intensity:</strong> Percentage of land under multiple crops</li>
+                                            <li><strong>Irrigation Coverage:</strong> Percentage of irrigated agricultural land</li>
+                                            <li><strong>Cultivated Land:</strong> Percentage of total cultivated area</li>
+                                            <li><strong>Small & Marginal Holdings:</strong> Percentage of small farmers</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card feature-card">
+                                    <div class="card-header bg-info text-white">
+                                        <h5 class="mb-0">💧 Water Parameters</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul>
+                                            <li><strong>GW Development:</strong> Groundwater development stage</li>
+                                            <li><strong>GW Irrigation Share:</strong> Groundwater dependency for irrigation</li>
+                                            <li><strong>Surface Water Bodies:</strong> Number and area coverage</li>
+                                            <li><strong>Water Level:</strong> Groundwater depth measurements</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card feature-card">
+                                    <div class="card-header bg-warning text-white">
+                                        <h5 class="mb-0">⚡ Energy Parameters</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul>
+                                            <li><strong>Electric Pumps:</strong> Percentage of electric pump usage</li>
+                                            <li><strong>Diesel Pumps:</strong> Percentage of diesel pump usage</li>
+                                            <li><strong>Electricity Tariff:</strong> Cost per kWH in paisa</li>
+                                            <li><strong>Solar Irradiance:</strong> Solar energy potential</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="card feature-card">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">🏢 Utility Parameters</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul>
+                                            <li><strong>DISCOM Name:</strong> Distribution company identifier</li>
+                                            <li><strong>DISCOM Rating:</strong> Utility performance rating</li>
+                                            <li><strong>Feeder Segregation:</strong> Agricultural feeder status</li>
+                                            <li><strong>Electricity Subsidy:</strong> Government subsidy levels</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Technical Details -->
+                    <section id="technical" class="mb-5">
+                        <h2 class="text-primary mb-4">⚙️ Technical Details</h2>
+                        <div class="card feature-card">
+                            <div class="card-body">
+                                <h5>🛠️ Technology Stack</h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul>
+                                            <li><strong>Frontend:</strong> Streamlit 1.28+</li>
+                                            <li><strong>Mapping:</strong> Folium with Leaflet</li>
+                                            <li><strong>Data Processing:</strong> Pandas, GeoPandas</li>
+                                            <li><strong>Visualization:</strong> Matplotlib, Plotly</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul>
+                                            <li><strong>Caching:</strong> Streamlit Cache (TTL: 3600s)</li>
+                                            <li><strong>Performance:</strong> Geometry simplification</li>
+                                            <li><strong>Data Format:</strong> Shapefiles, CSV</li>
+                                            <li><strong>Deployment:</strong> Streamlit Cloud</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <h5 class="mt-4">📊 Performance Optimizations</h5>
+                                <ul>
+                                    <li><strong>Aggressive Caching:</strong> 70% faster data lookup</li>
+                                    <li><strong>Geometry Simplification:</strong> 50% faster map rendering</li>
+                                    <li><strong>Optimized Statistics:</strong> 80% faster calculations</li>
+                                    <li><strong>Smart Filtering:</strong> 95% faster category switching</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Troubleshooting -->
+                    <section id="troubleshooting" class="mb-5">
+                        <h2 class="text-primary mb-4">🔧 Troubleshooting</h2>
+                        <div class="accordion" id="troubleshootingAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                        🐌 Dashboard Loading Slowly
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#troubleshootingAccordion">
+                                    <div class="accordion-body">
+                                        <ul>
+                                            <li>Clear browser cache and refresh</li>
+                                            <li>Check internet connection stability</li>
+                                            <li>Try accessing during off-peak hours</li>
+                                            <li>Use Chrome or Firefox for best performance</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                        🗺️ Map Not Displaying
+                                    </button>
+                                </h2>
+                                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
+                                    <div class="accordion-body">
+                                        <ul>
+                                            <li>Disable ad blockers temporarily</li>
+                                            <li>Enable JavaScript in browser settings</li>
+                                            <li>Check if third-party cookies are allowed</li>
+                                            <li>Try incognito/private browsing mode</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Footer -->
+                    <div class="text-center mt-5 pt-4 border-top">
+                        <p class="text-muted">
+                            <strong>Solar Suitability Dashboard</strong> - Developed by IWMI<br>
+                            For support, contact: <a href="mailto:support@iwmi.org">support@iwmi.org</a>
+                        </p>
+                        <div class="mt-3">
+                            <a href="index.html" class="btn btn-outline-primary me-2">🏠 Home</a>
+                            <a href="https://solarsustainabilitymap5.streamlit.app/" target="_blank" class="btn btn-primary">🚀 Launch Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
