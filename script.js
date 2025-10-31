@@ -1,19 +1,111 @@
-// Solar Sustainability Map Website JavaScript
+// ===================================
+// IWMI Solar Suitability Dashboard
+// Interactive JavaScript
+// ===================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Smooth scrolling for navigation links
-    const navLinks = document.querySelectorAll('a[href^="#"]');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
+
+    // ===== Hero Image Carousel =====
+    const heroSlides = document.querySelectorAll('.hero-slide');
+    const prevBtn = document.querySelector('.carousel-nav.prev');
+    const nextBtn = document.querySelector('.carousel-nav.next');
+    let currentSlide = 0;
+    let autoplayInterval;
+
+    function showSlide(index) {
+        // Remove active class from all slides
+        heroSlides.forEach(slide => slide.classList.remove('active'));
+
+        // Wrap around if index is out of bounds
+        if (index >= heroSlides.length) {
+            currentSlide = 0;
+        } else if (index < 0) {
+            currentSlide = heroSlides.length - 1;
+        } else {
+            currentSlide = index;
+        }
+
+        // Add active class to current slide
+        heroSlides[currentSlide].classList.add('active');
+    }
+
+    function nextSlide() {
+        showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+        showSlide(currentSlide - 1);
+    }
+
+    function startAutoplay() {
+        autoplayInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+    }
+
+    function stopAutoplay() {
+        clearInterval(autoplayInterval);
+    }
+
+    function restartAutoplay() {
+        stopAutoplay();
+        startAutoplay();
+    }
+
+    // Navigation button event listeners
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            restartAutoplay();
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            restartAutoplay();
+        });
+    }
+
+    // Pause autoplay on hover
+    const heroCarousel = document.querySelector('.hero-image-carousel');
+    if (heroCarousel) {
+        heroCarousel.addEventListener('mouseenter', stopAutoplay);
+        heroCarousel.addEventListener('mouseleave', startAutoplay);
+    }
+
+    // Start autoplay
+    if (heroSlides.length > 0) {
+        startAutoplay();
+    }
+
+    // ===== Mobile Menu Toggle =====
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            this.classList.toggle('active');
+        });
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.classList.remove('active');
+            });
+        });
+    }
+
+    // ===== Smooth Scrolling =====
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
             e.preventDefault();
-            
             const targetId = this.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
-            
-            if (targetSection) {
-                const offsetTop = targetSection.offsetTop - 70; // Account for fixed navbar
-                
+            if (targetId === '#') return;
+
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                const offsetTop = targetElement.offsetTop - 80; // Account for fixed navbar
                 window.scrollTo({
                     top: offsetTop,
                     behavior: 'smooth'
@@ -22,275 +114,346 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Navbar background change on scroll
+    // ===== Navbar Shadow on Scroll =====
     const navbar = document.querySelector('.navbar');
-    
+    let lastScroll = 0;
+
     window.addEventListener('scroll', function() {
-        if (window.scrollY > 50) {
-            navbar.style.backgroundColor = 'rgba(13, 110, 253, 0.95)';
-            navbar.style.backdropFilter = 'blur(10px)';
+        const currentScroll = window.pageYOffset;
+
+        if (currentScroll > 50) {
+            navbar.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
         } else {
-            navbar.style.backgroundColor = '#0d6efd';
-            navbar.style.backdropFilter = 'none';
+            navbar.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
         }
+
+        lastScroll = currentScroll;
     });
 
-    // Scroll progress indicator
-    const scrollIndicator = document.createElement('div');
-    scrollIndicator.className = 'scroll-indicator';
-    document.body.appendChild(scrollIndicator);
-
-    window.addEventListener('scroll', function() {
-        const scrollTop = window.pageYOffset;
-        const docHeight = document.body.offsetHeight - window.innerHeight;
-        const scrollPercent = scrollTop / docHeight;
-        
-        scrollIndicator.style.transform = `scaleX(${scrollPercent})`;
-    });
-
-    // Animate elements on scroll
+    // ===== Fade-in Animation on Scroll =====
     const observerOptions = {
         threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+        rootMargin: '0px 0px -100px 0px'
     };
 
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in-up');
+                entry.target.classList.add('fade-in');
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
 
-    // Observe all cards and sections
-    const animatedElements = document.querySelectorAll('.card, section h2, section p');
-    animatedElements.forEach(el => observer.observe(el));
+    // Observe elements for animation
+    const animateElements = document.querySelectorAll('.about-card, .feature-item, .category-card');
+    animateElements.forEach(el => observer.observe(el));
 
-    // Enhanced Feedback form handling
-    const feedbackForm = document.getElementById('feedbackForm');
-    
-    if (feedbackForm) {
-        feedbackForm.addEventListener('submit', function(e) {
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            
-            // Check if using Google Forms
-            if (this.hasAttribute('action') && this.getAttribute('action').includes('google.com/forms')) {
-                // Handle Google Forms submission
-                submitBtn.innerHTML = '<span class="loading"></span> Sending...';
-                submitBtn.disabled = true;
-                
-                // Show immediate feedback
-                showAlert('Sending your feedback...', 'info');
-                
-                // Show success message after form submission (Google Forms submits in background)
-                setTimeout(() => {
-                    showAlert('Thank you for your feedback! We\'ll review it soon.', 'success');
-                    this.reset();
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }, 2000);
-                
-                return; // Let form submit naturally to Google Forms
-            }
-            
-            // Check if using Formspree
-            if (this.hasAttribute('action') && this.getAttribute('action').includes('formspree.io')) {
-                // Let the form submit naturally to Formspree
-                submitBtn.innerHTML = '<span class="loading"></span> Sending...';
-                submitBtn.disabled = true;
-                
-                // Show immediate feedback
-                showAlert('Sending your feedback...', 'info');
-                return; // Let form submit naturally
-            }
-            
-            // Fallback: Handle form submission with JavaScript (for other services)
+    // ===== Contact Form Handling =====
+    const contactForm = document.getElementById('contactForm');
+
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             // Get form data
             const formData = new FormData(this);
-            const data = {
-                name: formData.get('name') || document.getElementById('name').value,
-                email: formData.get('email') || document.getElementById('email').value,
-                subject: formData.get('subject') || document.getElementById('subject').value,
-                message: formData.get('message') || document.getElementById('message').value,
-                rating: formData.get('rating') || document.getElementById('rating').value
-            };
-
-            // Validate form
-            if (!data.name || !data.email || !data.subject || !data.message) {
-                showAlert('Please fill in all required fields.', 'danger');
-                return;
-            }
+            const data = Object.fromEntries(formData);
 
             // Show loading state
-            submitBtn.innerHTML = '<span class="loading"></span> Sending...';
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
             submitBtn.disabled = true;
 
-            // Show setup instructions for form handler
-            showAlert('Please set up Google Forms, Microsoft Forms, or another form handler service to receive feedback submissions. Check the setup guide for instructions.', 'warning');
-            
-            // Reset button after showing message
+            // Simulate form submission (replace with actual API call)
             setTimeout(() => {
-                submitBtn.innerHTML = originalText;
+                // Show success message
+                showNotification('Thank you! Your message has been sent successfully.', 'success');
+
+                // Reset form
+                contactForm.reset();
+                submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
-            }, 4000);
+            }, 1500);
+
+            // For AWS deployment, replace the setTimeout with actual form submission:
+            /*
+            fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                showNotification('Thank you! Your message has been sent successfully.', 'success');
+                contactForm.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            })
+            .catch(error => {
+                showNotification('Sorry, there was an error sending your message. Please try again.', 'error');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
+            */
         });
     }
 
-    // Alert function
-    function showAlert(message, type = 'info') {
-        // Remove existing alerts
-        const existingAlerts = document.querySelectorAll('.alert');
-        existingAlerts.forEach(alert => alert.remove());
+    // ===== Notification System =====
+    function showNotification(message, type = 'info') {
+        // Remove existing notification if any
+        const existing = document.querySelector('.notification');
+        if (existing) {
+            existing.remove();
+        }
 
-        // Create new alert
-        const alert = document.createElement('div');
-        alert.className = `alert alert-${type} alert-dismissible fade show`;
-        alert.innerHTML = `
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        `;
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
 
-        // Insert alert at the top of the feedback section
-        const feedbackSection = document.getElementById('feedback');
-        const container = feedbackSection.querySelector('.container');
-        container.insertBefore(alert, container.firstChild);
+        // Style the notification
+        Object.assign(notification.style, {
+            position: 'fixed',
+            top: '100px',
+            right: '20px',
+            padding: '1rem 1.5rem',
+            borderRadius: '8px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            zIndex: '9999',
+            maxWidth: '400px',
+            animation: 'slideIn 0.3s ease-out',
+            fontWeight: '500'
+        });
 
-        // Auto-dismiss after 5 seconds
+        // Set colors based on type
+        if (type === 'success') {
+            notification.style.background = '#6CB33F';
+            notification.style.color = '#ffffff';
+        } else if (type === 'error') {
+            notification.style.background = '#FF5252';
+            notification.style.color = '#ffffff';
+        } else {
+            notification.style.background = '#0066A1';
+            notification.style.color = '#ffffff';
+        }
+
+        // Add to DOM
+        document.body.appendChild(notification);
+
+        // Remove after 5 seconds
         setTimeout(() => {
-            if (alert.parentNode) {
-                alert.remove();
-            }
+            notification.style.animation = 'slideOut 0.3s ease-out';
+            setTimeout(() => notification.remove(), 300);
         }, 5000);
     }
 
-    // Dashboard link tracking
-    const dashboardLinks = document.querySelectorAll('a[href*="streamlit.app"]');
-    dashboardLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            // Track dashboard access (you can integrate with analytics)
-            console.log('Dashboard accessed at:', new Date().toISOString());
-            
-            // Optional: Add analytics tracking here
-            // gtag('event', 'dashboard_access', { 'event_category': 'engagement' });
-        });
-    });
-
-    // Add hover effects to cards
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-10px) scale(1.02)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-    });
-
-    // Parallax effect for hero section
-    const heroSection = document.querySelector('.hero-section');
-    const heroIcon = document.querySelector('.hero-icon');
-    
-    if (heroSection && heroIcon) {
-        window.addEventListener('scroll', function() {
-            const scrolled = window.pageYOffset;
-            const rate = scrolled * -0.5;
-            
-            if (scrolled < heroSection.offsetHeight) {
-                heroIcon.style.transform = `translateY(${rate}px)`;
+    // Add animation styles
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
             }
-        });
-    }
-
-    // Add loading animation to external links
-    const externalLinks = document.querySelectorAll('a[target="_blank"]');
-    externalLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            const icon = this.querySelector('i');
-            if (icon && !icon.classList.contains('fa-external-link-alt')) {
-                const originalClass = icon.className;
-                icon.className = 'fas fa-spinner fa-spin';
-                
-                setTimeout(() => {
-                    icon.className = originalClass;
-                }, 1000);
+            to {
+                transform: translateX(0);
+                opacity: 1;
             }
-        });
-    });
+        }
 
-    // Mobile menu close on link click
-    const navbarCollapse = document.querySelector('.navbar-collapse');
-    const navbarToggler = document.querySelector('.navbar-toggler');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            if (navbarCollapse.classList.contains('show')) {
-                navbarToggler.click();
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
             }
-        });
-    });
-
-    // Add typing effect to hero title (optional enhancement)
-    const heroTitle = document.querySelector('.hero-section h1');
-    if (heroTitle) {
-        const text = heroTitle.textContent;
-        heroTitle.textContent = '';
-        
-        let i = 0;
-        const typeWriter = () => {
-            if (i < text.length) {
-                heroTitle.textContent += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, 50);
+            to {
+                transform: translateX(400px);
+                opacity: 0;
             }
-        };
-        
-        // Start typing effect after a short delay
-        setTimeout(typeWriter, 500);
-    }
+        }
 
-    // Add scroll-to-top button
-    const scrollToTopBtn = document.createElement('button');
-    scrollToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
-    scrollToTopBtn.className = 'btn btn-primary position-fixed';
-    scrollToTopBtn.style.cssText = `
-        bottom: 20px;
-        right: 20px;
-        z-index: 1000;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        display: none;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        .nav-links.active {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #003D5C;
+            padding: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
     `;
-    
-    document.body.appendChild(scrollToTopBtn);
+    document.head.appendChild(style);
 
-    // Show/hide scroll-to-top button
-    window.addEventListener('scroll', function() {
-        if (window.pageYOffset > 300) {
-            scrollToTopBtn.style.display = 'block';
-        } else {
-            scrollToTopBtn.style.display = 'none';
+    // ===== Dashboard Embed Handling =====
+    // This function can be used to dynamically load the Streamlit dashboard
+    function loadDashboard(url) {
+        const dashboardContainer = document.querySelector('.dashboard-placeholder');
+        if (dashboardContainer) {
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.style.cssText = 'width: 100%; height: 800px; border: none;';
+            iframe.setAttribute('allowfullscreen', '');
+
+            dashboardContainer.innerHTML = '';
+            dashboardContainer.appendChild(iframe);
+        }
+    }
+
+    // Uncomment and use this when deploying to AWS with Streamlit
+    // loadDashboard('https://your-streamlit-url.com');
+
+    // ===== Statistics Counter Animation =====
+    function animateCounter(element, target, duration = 2000) {
+        const start = 0;
+        const increment = target / (duration / 16);
+        let current = start;
+
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            element.textContent = Math.floor(current).toLocaleString();
+        }, 16);
+    }
+
+    // Observe statistics elements if they exist
+    const statsElements = document.querySelectorAll('[data-count]');
+    if (statsElements.length > 0) {
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = parseInt(entry.target.getAttribute('data-count'));
+                    animateCounter(entry.target, target);
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statsElements.forEach(el => statsObserver.observe(el));
+    }
+
+    // ===== Keyboard Navigation =====
+    document.addEventListener('keydown', function(e) {
+        // ESC key closes mobile menu
+        if (e.key === 'Escape' && navLinks && navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            mobileMenuBtn.classList.remove('active');
         }
     });
 
-    // Scroll to top functionality
-    scrollToTopBtn.addEventListener('click', function() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
+    // ===== Loading Screen (if needed) =====
+    function showLoading() {
+        const loader = document.createElement('div');
+        loader.className = 'page-loader';
+        loader.innerHTML = `
+            <div style="text-align: center;">
+                <i class="bi bi-gear" style="font-size: 3rem; color: #009B8C; animation: spin 2s linear infinite;"></i>
+                <p style="margin-top: 1rem; font-weight: 600; color: #1A202C;">Loading Dashboard...</p>
+            </div>
+        `;
+
+        Object.assign(loader.style, {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            right: '0',
+            bottom: '0',
+            background: 'rgba(255, 255, 255, 0.95)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: '99999'
         });
+
+        document.body.appendChild(loader);
+        return loader;
+    }
+
+    function hideLoading(loader) {
+        if (loader) {
+            loader.style.opacity = '0';
+            loader.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => loader.remove(), 300);
+        }
+    }
+
+    // ===== Accessibility Enhancements =====
+    // Add skip to content link
+    const skipLink = document.createElement('a');
+    skipLink.href = '#main-content';
+    skipLink.textContent = 'Skip to main content';
+    skipLink.className = 'skip-link';
+    Object.assign(skipLink.style, {
+        position: 'absolute',
+        top: '-40px',
+        left: '0',
+        background: '#0066A1',
+        color: 'white',
+        padding: '8px',
+        textDecoration: 'none',
+        zIndex: '100'
     });
 
-    // Initialize tooltips (if using Bootstrap tooltips)
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
+    skipLink.addEventListener('focus', function() {
+        this.style.top = '0';
     });
 
-    console.log('Solar Sustainability Map website loaded successfully!');
-}); 
+    skipLink.addEventListener('blur', function() {
+        this.style.top = '-40px';
+    });
+
+    document.body.insertBefore(skipLink, document.body.firstChild);
+
+    // ===== Console Welcome Message =====
+    console.log('%cIWMI Solar Suitability Dashboard', 'color: #0066A1; font-size: 24px; font-weight: bold;');
+    console.log('%cBuilt for sustainable agricultural development', 'color: #009B8C; font-size: 14px;');
+    console.log('');
+    console.log('> Analyzing solar energy potential');
+    console.log('> Managing water resources');
+    console.log('> Supporting agricultural sustainability');
+    console.log('');
+    console.log('Visit https://www.iwmi.cgiar.org for more information');
+
+    // ===== Performance Monitoring =====
+    if ('PerformanceObserver' in window) {
+        const perfObserver = new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+                if (entry.entryType === 'navigation') {
+                    console.log(`Page load time: ${entry.loadEventEnd - entry.startTime}ms`);
+                }
+            }
+        });
+
+        perfObserver.observe({ entryTypes: ['navigation'] });
+    }
+
+    // Page is fully loaded
+    console.log('> Dashboard frontend loaded successfully');
+});
+
+// ===== Export functions for AWS Lambda or API Gateway =====
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        // Add any functions you want to export for serverless deployment
+    };
+}

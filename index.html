@@ -3,209 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solar Sustainability Map</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="styles.css" rel="stylesheet">
-    <style>
-        :root {
-            --solar-gold: #FFD700;
-            --solar-orange: #FF8C00;
-            --solar-gradient: linear-gradient(135deg, #FFD700 0%, #FF8C00 50%, #FF6B35 100%);
-        }
-        
-        .navbar-brand img {
-            height: 40px;
-            margin-right: 12px;
-        }
-        
-        .hero-section {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="%23FFD700" opacity="0.3"><animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/></circle><circle cx="80" cy="30" r="1.5" fill="%23FF8C00" opacity="0.4"><animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></circle><circle cx="60" cy="70" r="1" fill="%23FFD700" opacity="0.5"><animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite"/></circle></svg>') repeat;
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 2;
-        }
-        
-        .btn-primary {
-            background: var(--solar-gradient);
-            border: none;
-            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 140, 0, 0.4);
-        }
-        
-        .card {
-            border-radius: 15px;
-            transition: all 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-        
-        .section-title {
-            background: var(--solar-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: bold;
-        }
-    </style>
+    <meta name="description" content="IWMI Solar Suitability Dashboard - Analyzing solar energy potential across Indian districts">
+    <title>Solar Suitability Dashboard | IWMI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
+    <!-- Top Header -->
+    <header class="top-header">
+        <img src="solar-header-sept-2025.jpg" alt="Solar Irrigation for Agricultural Resilience" class="header-image">
+    </header>
+
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#home">
-                <img src="IWMI_logo.png" alt="IWMI Logo">
-                <span>Solar Suitability Map</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#home">🏠 Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#dashboard">📊 Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="documentation.html">📚 Documentation</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about">ℹ️ About Us</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="feedback-embedded.html">💬 Feedback</a>
-                    </li>
-                </ul>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <img src="IWMI_Logo_white.png" alt="IWMI Logo" class="nav-logo-icon">
+                <span class="nav-title">Solar Suitability Dashboard</span>
             </div>
+            <ul class="nav-links">
+                <li><a href="#about">
+                    <i class="bi bi-info-circle"></i>
+                    <span>About</span>
+                </a></li>
+                <li><a href="#dashboard">
+                    <i class="bi bi-graph-up"></i>
+                    <span>Dashboard</span>
+                </a></li>
+                <li><a href="#contact">
+                    <i class="bi bi-envelope"></i>
+                    <span>Contact</span>
+                </a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
-    <!-- Home Section -->
-    <section id="home" class="hero-section">
+    <!-- Hero Section -->
+    <section class="hero">
+        <!-- Full Photo Carousel -->
+        <div class="hero-image-carousel">
+            <div class="hero-slide active">
+                <img src="1-3067x1090.webp" alt="Solar Energy Infrastructure">
+            </div>
+            <div class="hero-slide">
+                <img src="2-3067x1090.webp" alt="Agricultural Irrigation Systems">
+            </div>
+            <div class="hero-slide">
+                <img src="3-3067x1090.webp" alt="Water Management Research">
+            </div>
+            <div class="hero-slide">
+                <img src="4-3067x1090.webp" alt="Sustainable Energy Solutions">
+            </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <button class="carousel-nav prev" aria-label="Previous image">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+        <button class="carousel-nav next" aria-label="Next image">
+            <i class="bi bi-chevron-right"></i>
+        </button>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="waterlet waterlet-1"></div>
+        <div class="waterlet waterlet-2"></div>
+        <div class="waterlet waterlet-3"></div>
         <div class="container">
-            <div class="row align-items-center min-vh-100">
-                <div class="col-lg-6 hero-content">
-                    <h1 class="hero-title">
-                        Solar Suitability Mapping Platform
-                    </h1>
-                    <p class="hero-subtitle">
-                        Explore solar energy potential and suitability metrics across different regions with our interactive dashboard powered by advanced geospatial analysis and cutting-edge research.
-                    </p>
-                    <div class="hero-buttons">
-                        <a href="#dashboard" class="btn btn-light btn-lg">
-                            <i class="fas fa-chart-line"></i>
-                            View Dashboard
-                        </a>
-                        <a href="#about" class="btn btn-outline-light btn-lg">
-                            <i class="fas fa-info-circle"></i>
-                            Learn More
-                        </a>
+            <div class="section-header">
+                <h2 class="section-title">About the Dashboard</h2>
+                <p class="section-subtitle">A comprehensive analytical platform for evidence-based solar suitability assessment</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-card">
+                    <div class="card-icon">
+                        <i class="bi bi-sun"></i>
                     </div>
+                    <h3>Solar Potential</h3>
+                    <p>Comprehensive solar suitability rankings across Indian districts based on adaptation, mitigation, and groundwater sustainability objectives.</p>
                 </div>
-                <div class="col-lg-6">
-                    <div class="hero-image">
-                        <img src="SolarSustainability.png" alt="Solar Suitability Visualization" class="img-fluid">
+                <div class="about-card">
+                    <div class="card-icon">
+                        <i class="bi bi-droplet"></i>
                     </div>
+                    <h3>Water & Agriculture</h3>
+                    <p>Integrated analysis of irrigation patterns, groundwater development, and agricultural practices for informed decision-making.</p>
+                </div>
+                <div class="about-card">
+                    <div class="card-icon">
+                        <i class="bi bi-lightning-charge"></i>
+                    </div>
+                    <h3>Energy Infrastructure</h3>
+                    <p>Detailed insights on electricity infrastructure, pump distribution, tariff structures, and utility performance metrics.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Dashboard Section -->
-    <section id="dashboard" class="py-5 bg-light">
+    <section id="dashboard" class="dashboard-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">☀️ Interactive Dashboard</h2>
-                <p class="section-subtitle">
-                    Access our comprehensive solar suitability mapping tool with advanced analytics and real-time data visualization
-                </p>
+                <h2 class="section-title">Dashboard</h2>
+                <p class="section-subtitle">Interactive solar suitability analytics by country</p>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="card shadow-lg border-0">
-                        <div class="card-body p-4">
-                            <div class="text-center mb-4">
-                                <i class="fas fa-solar-panel fa-3x text-warning mb-3"></i>
-                                <h4>Solar Suitability Map Dashboard</h4>
-                                <p class="text-muted">
-                                    Explore interactive maps, analyze solar potential, and discover suitability insights
-                                </p>
-                            </div>
-                            <div class="d-grid">
-                                <a href="https://solarsustainabilitymap5.streamlit.app/" 
-                                   target="_blank" 
-                                   class="btn btn-primary btn-lg">
-                                    <i class="fas fa-rocket me-2"></i>
-                                    Launch Dashboard
-                                </a>
-                            </div>
-                        </div>
+            <div class="countries-grid">
+                <!-- India -->
+                <div class="country-card active">
+                    <h3>India</h3>
+                    <p>Comprehensive solar suitability rankings across Indian districts</p>
+                    <a href="https://solarsustainabilitymap5.streamlit.app/" class="btn btn-primary" target="_blank">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        <span>Open Dashboard</span>
+                    </a>
+                </div>
+
+                <!-- Bangladesh -->
+                <div class="country-card coming-soon">
+                    <h3>Bangladesh</h3>
+                    <p>Solar suitability analysis for Bangladesh regions</p>
+                    <div class="coming-soon-badge">
+                        <span>Coming Soon</span>
+                    </div>
+                </div>
+
+                <!-- Ethiopia -->
+                <div class="country-card coming-soon">
+                    <h3>Ethiopia</h3>
+                    <p>Solar suitability analysis for Ethiopian regions</p>
+                    <div class="coming-soon-badge">
+                        <span>Coming Soon</span>
+                    </div>
+                </div>
+
+                <!-- Kenya -->
+                <div class="country-card coming-soon">
+                    <h3>Kenya</h3>
+                    <p>Solar suitability analysis for Kenyan counties</p>
+                    <div class="coming-soon-badge">
+                        <span>Coming Soon</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About Us Section -->
-    <section id="about" class="py-5">
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">🌍 About Us</h2>
-                <p class="section-subtitle">
-                    Learn about our organization and the innovative research behind this project
-                </p>
+                <h2 class="section-title">Contact</h2>
+                <p class="section-subtitle">International Water Management Institute (IWMI)</p>
             </div>
-            
-            <!-- IWMI Section -->
-            <div class="row mb-5">
-                <div class="col-lg-12 mb-4">
-                    <div class="card h-100 border-0 shadow">
-                        <div class="card-body p-4">
-                            <div class="text-center mb-3">
-                                <img src="IWMI_logo.png" alt="IWMI Logo" style="height: 80px;" class="mb-3">
-                                <h4>International Water Management Institute (IWMI)</h4>
-                            </div>
-                            <p class="text-muted">
-                                IWMI is a non-profit, scientific research organization focusing on the sustainable use of water and land resources in developing countries. We work to improve the lives of poor people by providing evidence-based solutions to sustainably manage water and land resources.
-                            </p>
-                            <div class="mt-3">
-                                <h6>Key Focus Areas:</h6>
-                                <ul class="list-unstyled">
-                                    <li><i class="fas fa-check text-success me-2"></i>Water, climate change and resilience</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Water Data Science</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Water, food and ecosystems</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Water, growth and inclusion</li>
-                                </ul>
-                            </div>
-                            <div class="text-center mt-4">
-                                <a href="https://www.iwmi.org" target="_blank" class="btn btn-outline-primary">
-                                    <i class="fas fa-external-link-alt me-2"></i>
-                                    Visit IWMI Website
-                                </a>
-                            </div>
+            <div class="contact-card">
+                <p class="contact-text">IWMI is a non-profit international research organization focused on sustainable management of water and land resources.</p>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+                        <div class="contact-content">
+                            <span>iwmi-communications@cgiar.org</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="bi bi-globe"></i>
+                        </div>
+                        <div class="contact-content">
+                            <a href="https://www.iwmi.org/" target="_blank">www.iwmi.org</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="bi bi-sun"></i>
+                        </div>
+                        <div class="contact-content">
+                            <a href="https://solar.iwmi.org/" target="_blank">solar.iwmi.org</a>
+                            <span style="color: var(--dark-gray); font-size: 0.875rem; display: block; margin-top: 0.25rem;">SoLAR Project</span>
                         </div>
                     </div>
                 </div>
@@ -214,33 +198,43 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-4">
+    <footer class="footer">
         <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>Solar Suitability Map</h5>
-                    <p class="text-muted">
-                        Powered by IWMI - International Water Management Institute
-                    </p>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="iwmi.webp" alt="IWMI Logo" class="footer-logo">
+                    <p>Transforming lives through innovative water and land management research</p>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <p class="text-muted">
-                        © 2025 IWMI. All rights reserved.
-                    </p>
+                <div class="footer-section">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#dashboard">Dashboard</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="https://www.iwmi.org/" target="_blank">IWMI Website</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
                     <div class="social-links">
-                        <a href="https://www.iwmi.org" target="_blank" class="text-white me-3">
-                            <i class="fas fa-globe"></i>
+                        <a href="https://x.com/IWMI_" class="social-icon" aria-label="X (Twitter)" target="_blank">
+                            <i class="bi bi-twitter-x"></i>
                         </a>
-                        <a href="https://github.com/DrJagadeeshG/solar_sustainability_map.io" target="_blank" class="text-white">
-                            <i class="fab fa-github"></i>
+                        <a href="https://www.linkedin.com/company/iwmi/" class="social-icon" aria-label="LinkedIn" target="_blank">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                        <a href="https://www.youtube.com/iwmimedia" class="social-icon" aria-label="YouTube" target="_blank">
+                            <i class="bi bi-youtube"></i>
                         </a>
                     </div>
                 </div>
             </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 International Water Management Institute (IWMI)</p>
+            </div>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
-</html> 
+</html>
